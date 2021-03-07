@@ -14,8 +14,8 @@ public class SpringBeans {
 	 */
 	@Test
 	public void test() {
-		//xml资源路径，todo, 找不到定位原因
-		String path = "test/beans.xml";
+		//xml资源路径，test优先在test 的resources下找
+		String path = "beans.xml";
 		//创建 DefaultListableBeanFactory工厂，这就是spring的基础容器（另一个是高级容器）
 		DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
 		//创建beanDefinition阅读器
