@@ -146,6 +146,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 
 		preProcessXml(root);
+		//重点流程
 		parseBeanDefinitions(root, this.delegate);
 		postProcessXml(root);
 
@@ -166,22 +167,27 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	 * @param root the DOM root element of the document
 	 */
 	protected void parseBeanDefinitions(Element root, BeanDefinitionParserDelegate delegate) {
+		//xml是否使用了spring默认的命名空间：
+		//<beans xmlns="http://www.springframework.org/schema/beans"
 		if (delegate.isDefaultNamespace(root)) {
+			//获取根元素节点
 			NodeList nl = root.getChildNodes();
 			for (int i = 0; i < nl.getLength(); i++) {
 				Node node = nl.item(i);
 				if (node instanceof Element) {
 					Element ele = (Element) node;
+					//是否是默认命名空间的标签：bean、import、alias等
+					//是则使用默认parse解析规则
 					if (delegate.isDefaultNamespace(ele)) {
 						parseDefaultElement(ele, delegate);
 					}
-					else {
+					else {//自定义解析规则的元素节点：aop,context,tx等
 						delegate.parseCustomElement(ele);
 					}
 				}
 			}
 		}
-		else {
+		else {//如果不是默认命名空间，使用自定义解析规则解析
 			delegate.parseCustomElement(root);
 		}
 	}

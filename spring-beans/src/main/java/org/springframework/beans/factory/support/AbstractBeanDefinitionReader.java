@@ -185,6 +185,7 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 		Assert.notNull(resources, "Resource array must not be null");
 		int count = 0;
 		for (Resource resource : resources) {
+			//4.该抽象类implement的interface：BeanDefinitionReader的方法
 			count += loadBeanDefinitions(resource);
 		}
 		return count;
@@ -217,10 +218,13 @@ public abstract class AbstractBeanDefinitionReader implements BeanDefinitionRead
 					"Cannot load bean definitions from location [" + location + "]: no ResourceLoader available");
 		}
 
+		//1.根据source的不同类型去使用不同的resolver(解决器)
 		if (resourceLoader instanceof ResourcePatternResolver) {
 			// Resource pattern matching available.
 			try {
+				//2.在抽象类中实现共性操作：通过路径获取Resource数组
 				Resource[] resources = ((ResourcePatternResolver) resourceLoader).getResources(location);
+				//3.类内方法重载
 				int count = loadBeanDefinitions(resources);
 				if (actualResources != null) {
 					Collections.addAll(actualResources, resources);

@@ -45,6 +45,7 @@ public interface BeanDefinitionDocumentReader {
 	 * @throws BeanDefinitionStoreException in case of parsing errors
 	 */
 	void registerBeanDefinitions(Document doc, XmlReaderContext readerContext)
+			//只有一个实现类：DefaultBeanDefinitionDocumentReader.registerBeanDefinitions()
 			throws BeanDefinitionStoreException;
 
 }
