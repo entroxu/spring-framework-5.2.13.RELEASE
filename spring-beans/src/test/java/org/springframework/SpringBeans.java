@@ -1,11 +1,8 @@
 package org.springframework;
 
-import org.apache.logging.log4j.core.config.xml.XmlConfigurationFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.DataSource;
 import org.springframework.beans.UserDao;
-import org.springframework.beans.UserService;
-import org.springframework.beans.factory.support.AbstractBeanDefinitionReader;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.beans.factory.xml.XmlBeanFactory;
@@ -50,6 +47,9 @@ public class SpringBeans {
 
 		//UserService userService = beanFactory.getBean(UserService.class);
 		DataSource dataSource =  beanFactory.getBean(DataSource.class);
+		//scope="prototype"会多次实例化
+		beanFactory.getBean(UserDao.class);
+		beanFactory.getBean(UserDao.class);
 
 		Field field = dataSource.getClass().getDeclaredField("url");
 		field.setAccessible(true);

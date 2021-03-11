@@ -126,6 +126,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		// then ultimately reset this.delegate back to its original (parent) reference.
 		// this behavior emulates a stack of delegates without actually necessitating one.
 		BeanDefinitionParserDelegate parent = this.delegate;
+		//创建beanDefinitionParserDelegate：beanDefinition处理代表
 		this.delegate = createDelegate(getReaderContext(), root, parent);
 
 		if (this.delegate.isDefaultNamespace(root)) {
@@ -146,7 +147,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 		}
 		//预处理
 		preProcessXml(root);
-		//重点流程
+		//通过生成的BeanDefinitionParserDelegate，将Element（doc.getDocumentElement()）传入进行处理
 		parseBeanDefinitions(root, this.delegate);
 		postProcessXml(root);
 
@@ -179,6 +180,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 					//是否是默认命名空间的标签：bean、import、alias等
 					//是则使用默认parse解析规则
 					if (delegate.isDefaultNamespace(ele)) {
+						//主流程：
 						parseDefaultElement(ele, delegate);
 					}
 					else {//自定义解析规则的元素节点：aop,context,tx等
@@ -193,16 +195,17 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	}
 
 	private void parseDefaultElement(Element ele, BeanDefinitionParserDelegate delegate) {
-		if (delegate.nodeNameEquals(ele, IMPORT_ELEMENT)) {
+		if (delegate.nodeNameEquals(ele, IMPORT_ELEMENT)) {//import
 			importBeanDefinitionResource(ele);
 		}
-		else if (delegate.nodeNameEquals(ele, ALIAS_ELEMENT)) {
+		else if (delegate.nodeNameEquals(ele, ALIAS_ELEMENT)) {//alias
 			processAliasRegistration(ele);
 		}
-		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) {
+		//解析bean标签
+		else if (delegate.nodeNameEquals(ele, BEAN_ELEMENT)) { //bean
 			processBeanDefinition(ele, delegate);
 		}
-		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {
+		else if (delegate.nodeNameEquals(ele, NESTED_BEANS_ELEMENT)) {//beans
 			// recurse
 			doRegisterBeanDefinitions(ele);
 		}
@@ -311,6 +314,7 @@ public class DefaultBeanDefinitionDocumentReader implements BeanDefinitionDocume
 	protected void processBeanDefinition(Element ele, BeanDefinitionParserDelegate delegate) {
 		BeanDefinitionHolder bdHolder = delegate.parseBeanDefinitionElement(ele);
 		if (bdHolder != null) {
+			//装饰beanDefinition,内部：new ParserContext
 			bdHolder = delegate.decorateBeanDefinitionIfRequired(ele, bdHolder);
 			try {
 				// Register the final decorated instance.
