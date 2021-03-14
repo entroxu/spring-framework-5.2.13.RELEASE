@@ -10,7 +10,7 @@ import org.springframework.core.io.ClassPathResource;
 
 import java.lang.reflect.Field;
 
-public class SpringBeans {
+public class SpringBeansCodeRead {
 
 	/**
 	 * 早期 XmlBeanFactory
@@ -46,7 +46,9 @@ public class SpringBeans {
 		//bean实例创建流程
 
 		//UserService userService = beanFactory.getBean(UserService.class);
-		DataSource dataSource =  beanFactory.getBean(DataSource.class);
+		DataSource dataSource = (DataSource) beanFactory.getBean("dataSource");
+		//懒加载，第二个次获取才会加入map中
+		DataSource dataSource1 = (DataSource) beanFactory.getBean("dataSource");
 		//scope="prototype"会多次实例化
 		beanFactory.getBean(UserDao.class);
 		beanFactory.getBean(UserDao.class);

@@ -7,7 +7,7 @@
 
 	<!-- 该类有一个初始化方法 -->
 	<bean id="userService"
-		  class="org.springframework.beans.UserService" init-method="my_init">
+		  class="org.springframework.beans.UserService" init-method="my_init" scope="singleton">
 		<!-- 引用类型 -->
 		<property name="userDao" ref="userDao" />
 	</bean>
